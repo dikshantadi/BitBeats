@@ -1,24 +1,24 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Bitbeats</title>
+  <title>BitBeat</title>
   <link rel="stylesheet" href="style.css">
+  <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
   <script src="script.js" defer></script>
 </head>
 <body>
   <div class="container">
-    <h1> Bitbeats</h1>
+    <h1> BitBeats <i class="fa-solid fa-wave-square"></i> </h1>
 
     <div class="card">
-      <h2>Write Message to Send [Encode]</h2>
-      <input id="bitInput" type="text" placeholder="Enter bits (e.g., 10101)">
+      <h2>Encode</h2>
+      <input id="bitInput" type="text" placeholder="Enter your message here" />
       <button onclick="sendBits()">Encode</button>
     </div>
 
     <div class="card">
-      <h2>Decode the message</h2>
+      <h2>Decode</h2>
       <button onclick="sendAudio()">Listen & Decode</button>
       <pre id="output"></pre>
     </div>

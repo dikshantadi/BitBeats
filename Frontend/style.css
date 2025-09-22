@@ -1,36 +1,46 @@
 body {
-  font-family: 'Segoe UI', sans-serif;
-  background: linear-gradient(to right, #27b67a, #2193b0);
-  margin: 1;
+    background-image: url('pics/Soundwave.jpg');
+    background-size: cover;
+  font-family: 'Orbitron', sans-serif;
+  margin: 0;
   padding: 0;
   display: flex;
-  justify-content: center;
+  justify-content: space-evenly;
   align-items: center;
   height: 100vh;
+    color: #333;
+    background-position: center;
+    background-repeat: no-repeat;
+    background-attachment: fixed; 
 }
-
 .container {
+    background: rgba(255,255,255,0.05);
   padding: 20px 30px;
   border-radius: 15px;
   box-shadow: 0 8px 20px rgba(0,0,0,0.2);
   width: 400px;
   text-align: center;
-    background: rgb(224, 224, 224);
-    border: 2px solid rgb(227, 26, 26);
+    border: 2px solid rgb(233, 30, 99);
+    backdrop-filter: blur(4px);
 }
 
 h1 {
   margin-bottom: 20px;
-  color: #050505;
+  color: #fcfbfb;
 }
 
 .card {
-  background: #f9f9f9;
+  background: #f4f3f3;
   padding: 15px;
   margin: 15px 0;
   border-radius: 10px;
-  box-shadow: 0 4px 10px rgba(0,0,0,0.1);
-  border: 2px solid rgb(225, 220, 220);
+  box-shadow: 0 4px 30px rgba(0,0,0,0.1);
+  border: 1px solid rgb(225, 255, 255);
+}
+
+.card:hover {
+  transform: scale(1.01);
+  transition: 0.2s;
 }
 
 input {
@@ -44,14 +54,17 @@ input {
 button {
   padding: 10px 20px;
   border: none;
-  background: #42bddc;
+  background: rgba(66,189,220,0.8);
   color: white;
   font-weight: bold;
   border-radius: 8px;
   cursor: pointer;
   transition: 0.3s;
+  box-shadow: 0 0 10px rgba(10, 165, 165, 0.7);
+  border-radius: 25px;
 }
 
 button:hover {
-  background: #08313e;
+  background: rgba(66,189,220,1);
+  box-shadow: 0 0 20px rgba(66,189,220,1);
 }
