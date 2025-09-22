@@ -1,33 +1,33 @@
 #This file is Encoding Data into Audio File and Using Frequency Shift Keying Modulation Technique
 
-import scipy
 from scipy.io.wavfile import write
 import matplotlib.pyplot as plt 
-import wave
 import numpy as np 
 from math import pi
-from enkode import take_message
+from enkode import text_to_bitstream
 
 #defining
 fs = 44100 # Sampling frequency
-Tb = 0.15    # bit duration in seconds
-f0 = 17000   # Frequency for bit 0 in Hz
-f1 = 17500   # Frequency for bit 1 in Hz 
+Tb = 0.25    # bit duration in seconds
+f0 = 4000   # Frequency for bit 0 in Hz
+f1 = 4500   # Frequency for bit 1 in Hz 
 
-signal = np.array([])
-bitstream = take_message()
+def encode_text(txt: str) -> np.ndarray:
+    signal = np.array([])
+    bitstream = text_to_bitstream(txt)
 
-for bit in bitstream :
-    f = f1 if bit == '1' else f0
-    t = np.linspace(0, Tb, int(fs*Tb), endpoint=False)
-    sine_wave = np.sin(2 * pi * f * t)
-    signal = np.concatenate((signal, sine_wave))
+    for bit in bitstream :
+        f = f1 if bit == '1' else f0
+        t = np.linspace(0, Tb, int(fs*Tb), endpoint=False)
+        sine_wave = np.sin(2 * pi * f * t)
+        signal = np.concatenate((signal, sine_wave))
 
-signal_int16 = np.int16(signal * 32767)
-
+    signal_int16 = np.int16(signal * 32767)
+    return signal_int16
+"""
 write("fsk_message.wav", fs, signal_int16)
 print("WAV file saved")
-
+"""
 """
 for noise 
 sigma = 1
@@ -40,12 +40,14 @@ write("fsk_message_noisy.wav", fs, signal_int16)
 print("Noisy WAV file saved")
 
 """
+
+""" # Plotting the waveform
 plt.plot(signal[:1000])
 plt.title("FSK waveform (first few samples)")
 plt.xlabel("Sample")
 plt.ylabel("Amplitude")
 plt.savefig("fsk_waveform.png")
-
+"""
 
 
 

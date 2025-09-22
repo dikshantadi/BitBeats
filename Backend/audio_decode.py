@@ -27,14 +27,10 @@ def apply_bandpass(signal, fs, f_low, f_high, numtaps=101): #FIR bandpass
     filtered_signal = lfilter(taps, 1.0, signal)
     return filtered_signal
 
-def fsk_demodulator(wav_file, f0, f1, Tb):
-    fs, data = wavfile.read(wav_file)
-    data = data.astype(float)
-
-    print(f"Sampling rate: {fs} Hz, Length: {len(data)} samples")
-
+def decode_fsk(audio_array, fs, f0=17000, f1=17500, Tb=0.15):
+    data = np.array(audio_array, dtype=float)
     if data.ndim > 1:
-        data = data[:,0]  
+        data = data[:,0] 
 
     N = int(Tb * fs)
     bitstream = ""
@@ -50,7 +46,7 @@ def fsk_demodulator(wav_file, f0, f1, Tb):
         bit = '0' if mag0 > mag1 else '1'
         bitstream += bit
 
-    # To convert bit to message
+    # Convert bits to text
     chars = []
     for i in range(0, len(bitstream), 8):
         byte = bitstream[i:i+8]
@@ -60,10 +56,6 @@ def fsk_demodulator(wav_file, f0, f1, Tb):
 
     return bitstream, message
 
-if __name__ == "__main__":
-    bits, msg = fsk_demodulator("fsk_message.wav", f0=17000, f1=17500, Tb=0.15)
-    print("Recovered bits:", bits)
-    print("Recovered message:", msg)
 
 
 
