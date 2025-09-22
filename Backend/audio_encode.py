@@ -7,7 +7,7 @@ from math import pi
 from enkode import text_to_bitstream
 
 #defining
-fs = 44100 # Sampling frequency
+fs = 48000 # Sampling frequency
 Tb = 0.25    # bit duration in seconds
 f0 = 4000   # Frequency for bit 0 in Hz
 f1 = 4500   # Frequency for bit 1 in Hz 
@@ -22,7 +22,7 @@ def encode_text(txt: str) -> np.ndarray:
         sine_wave = np.sin(2 * pi * f * t)
         signal = np.concatenate((signal, sine_wave))
 
-    signal_int16 = np.int16(signal * 32767)
+    signal_int16 = np.array(signal * 32767, dtype=np.int16)
     return signal_int16
 """
 write("fsk_message.wav", fs, signal_int16)

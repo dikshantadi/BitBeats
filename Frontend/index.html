@@ -5,6 +5,7 @@
   <link rel="stylesheet" href="style.css">
   <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+  <script src="https://unpkg.com/wavefile@14.0.0/dist/wavefile.min.js"></script>
   <script src="script.js" defer></script>
 </head>
 <body>
@@ -19,7 +20,7 @@
 
     <div class="card">
       <h2>Decode</h2>
-      <button onclick="listenAndDecode()">Listen & Decode</button>
+      <button onclick="listenAndDecodeToggle(this)">Listen & Decode</button>
       <pre id="output"></pre>
     </div>
   </div>

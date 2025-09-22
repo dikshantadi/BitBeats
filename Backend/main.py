@@ -1,9 +1,11 @@
-from fastapi import FastAPI
+from fastapi import FastAPI, File, UploadFile
 from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel
 from audio_encode import encode_text
 from audio_decode import decode_fsk
 import numpy as np
+from scipy.io import wavfile
+from scipy.signal import resample
 
 
 app = FastAPI()
@@ -29,8 +31,27 @@ def encode(request: EncodeRequest):
     return {"audio_data": audio_array.tolist()}
 
 @app.post("/decode")
-def decode(request: DecodeRequest):
-    
-    audio_array = np.array(request.audio_data, dtype=np.float32)
-    bitstream, message = decode_fsk(audio_array, fs=44100, f0=17000, f1=17500, Tb=0.15)
+async def decode(file: UploadFile = File(...)):
+    # Read WAV from uploaded file
+    contents = await file.read()
+    audio_data = np.frombuffer(contents, dtype=np.uint8)
+
+    # Read WAV
+    try:
+        fs, data = wavfile.read(np.frombuffer(contents, dtype=np.uint8))
+    except:
+        return {"error": "Failed to read WAV. Make sure file is WAV format."}
+
+    # Resample to 44100 Hz if needed
+    target_fs = 44100
+    if fs != target_fs:
+        num_samples = int(len(data) * target_fs / fs)
+        data = resample(data, num_samples)
+        fs = target_fs
+
+    # Normalize
+    data = data.astype(float) # type: ignore
+    data /= np.max(np.abs(data)) + 1e-9
+
+    bitstream, message = decode_fsk(data, fs)
     return {"bitstream": bitstream, "message": message}
