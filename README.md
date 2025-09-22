@@ -4,7 +4,9 @@ BitBeats is a audio messaging web application that encodes text into audio using
 
 Tech Stack:
 Frontend: HTML, CSS, JavaScript (vanilla), MediaRecorder API
+
 Backend: Python, FastAPI
+
 Audio Signal Processing and Modulation: NumPy, SciPy
 
 
