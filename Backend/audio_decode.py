@@ -3,10 +3,7 @@ import numpy as np
 from scipy.signal import firwin, lfilter
 
 
-def goertzel(chunk, target_freq, fs):
-    """
-    Compute Goertzel magnitude for a single frequency
-    """
+def goertzel(chunk, target_freq, fs):    #goertzel algorithm 
     N = len(chunk)
     k = int(0.5 + (N * target_freq) / fs)
     omega = (2.0 * np.pi * k) / N
@@ -23,11 +20,8 @@ def goertzel(chunk, target_freq, fs):
     magnitude = np.sqrt(s_prev2**2 + s_prev**2 - coeff * s_prev * s_prev2)
     return magnitude
 
-def apply_bandpass(signal, fs, f_low, f_high, numtaps=101):
-    """
-    Apply FIR bandpass filter to the signal
-    f_low, f_high in Hz
-    """
+def apply_bandpass(signal, fs, f_low, f_high, numtaps=101): #FIR bandpass 
+
     nyq = fs / 2
     taps = firwin(numtaps, [f_low/nyq, f_high/nyq], pass_zero=False)
     filtered_signal = lfilter(taps, 1.0, signal)
@@ -40,7 +34,7 @@ def fsk_demodulator(wav_file, f0, f1, Tb):
     print(f"Sampling rate: {fs} Hz, Length: {len(data)} samples")
 
     if data.ndim > 1:
-        data = data[:,0]  # Use first channel if stereo
+        data = data[:,0]  
 
     N = int(Tb * fs)
     bitstream = ""
@@ -56,7 +50,7 @@ def fsk_demodulator(wav_file, f0, f1, Tb):
         bit = '0' if mag0 > mag1 else '1'
         bitstream += bit
 
-    # Convert bitstream to ASCII message
+    # To convert bit to message
     chars = []
     for i in range(0, len(bitstream), 8):
         byte = bitstream[i:i+8]
