@@ -15,3 +15,5 @@ Encode: Type a message → click Encode → hear FSK audio.
 Decode: Click Listen & Decode → allow microphone access → decoded message appears.
 
 Start/Stop recording: Single button toggles recording for mobile/PC.
+
+(Currently in Development and has lots of error that im unable to solve :( ) 
