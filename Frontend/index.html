@@ -1,22 +1,24 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <title>FSK App</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Bitbeats</title>
   <link rel="stylesheet" href="style.css">
   <script src="script.js" defer></script>
 </head>
 <body>
   <div class="container">
-    <h1>🎵 Bitbeats</h1>
+    <h1> Bitbeats</h1>
 
     <div class="card">
-      <h2>Encode</h2>
+      <h2>Write Message to Send [Encode]</h2>
       <input id="bitInput" type="text" placeholder="Enter bits (e.g., 10101)">
-      <button onclick="sendBits()">Encode & Play</button>
+      <button onclick="sendBits()">Encode</button>
     </div>
 
     <div class="card">
-      <h2>Decode</h2>
+      <h2>Decode the message</h2>
       <button onclick="sendAudio()">Listen & Decode</button>
       <pre id="output"></pre>
     </div>
