@@ -22,7 +22,6 @@ function playAudio(audioArray) {
     source.start();
 }
 
-// Encode message and play
 async function sendBits() {
     const message = encodeInput.value;
     if (!message) {

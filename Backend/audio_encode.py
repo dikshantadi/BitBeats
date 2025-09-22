@@ -1,4 +1,4 @@
-#This file is Encoding Data into Audio File and Using Frequency Shift Keying Modulation Technique
+#This file is Encoding Data into Audio File and Using FSK Modulation Technique
 
 from scipy.io.wavfile import write
 import matplotlib.pyplot as plt 

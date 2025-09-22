@@ -32,7 +32,6 @@ def encode(request: EncodeRequest):
 
 @app.post("/decode")
 async def decode(file: UploadFile = File(...)):
-    # Read WAV from uploaded file
     contents = await file.read()
     audio_data = np.frombuffer(contents, dtype=np.uint8)
 
