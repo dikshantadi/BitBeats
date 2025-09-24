@@ -8,9 +8,9 @@ from enkode import text_to_bitstream
 
 #defining
 fs = 48000 # Sampling frequency
-Tb = 0.25    # bit duration in seconds
-f0 = 4000   # Frequency for bit 0 in Hz
-f1 = 4500   # Frequency for bit 1 in Hz 
+Tb = 0.10    # bit duration in seconds
+f0 = 17000   # Frequency for bit 0 in Hz
+f1 = 17500   # Frequency for bit 1 in Hz 
 
 def encode_text(txt: str) -> np.ndarray:
     signal = np.array([])
