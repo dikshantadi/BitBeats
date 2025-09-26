@@ -6,8 +6,17 @@ from audio_encode import encode_text as encode_text_fn
 import numpy as np
 from scipy.io import wavfile
 from pydantic import BaseModel
+from models import User
+from data_base import SessionLocal, engine, Base
 
 app = FastAPI()
+
+def get_db():
+    db = SessionLocal()
+    try:
+        yield db
+    finally:
+        db.close()
 
 app.add_middleware(
     CORSMiddleware,
@@ -16,6 +25,15 @@ app.add_middleware(
     allow_methods=["*"],
     allow_headers=["*"],
 )
+
+@app.post("/users/")
+def create_user(user: User, db: SessionLocal = Depends(get_db)): # type: ignore
+    user = User(username=user.username)
+    db.add(user)
+    db.commit()
+    db.refresh(user)
+    return {id : user.id, "username": user.username}
+
 
 class EncodeRequest(BaseModel):
     message: str
