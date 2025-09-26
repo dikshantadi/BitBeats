@@ -1,0 +1,74 @@
+body{
+    background-image: url(pics/pexels-googledeepmind-17483910.jpg);
+    background-size: cover;
+    background-repeat: no-repeat;
+    display: flex;
+    height: 100vh;
+    justify-content:space-evenly;
+    align-items: center;
+    margin: 0;
+
+}
+
+p {
+    position: relative;
+    color: rgb(16, 16, 16);
+    font-family:cursive;
+    font-size: 20px;
+    left: 5px;
+}
+
+.Topheader{
+    font-size: 30px;
+    position:relative;
+    font-family: cursive;
+    color: white;
+
+}
+
+.Form{
+    display: flex;
+    position: relative;
+    padding: 80px;
+    width: 400px;
+    height: 450px;
+    justify-content: center;
+    border: 2px solid rgb(91, 9, 9);
+    backdrop-filter: blur(8px);
+    color: rgb(16, 16, 16);
+}
+
+.Formcontainer{
+    display: flex;
+    flex-direction: column;
+}
+
+.Inputtext{
+    height: 40px;
+    width: 100%;
+    border: none;
+    outline: none;
+    border-radius: 10px;
+    padding: 0 0 0 20px;
+    opacity: 90%;
+}
+::-webkit-input-placeholder{
+    color: rgb(175, 54, 228);
+}
+ i{
+    position: relative;
+    top: -30px;
+    right: 20px;
+ }
+
+#submitbot{
+    height: 40px;
+    width: 100%;
+    border: none;
+    outline: none;
+    border-radius: 10px;
+    color: azure;
+    background-color: rgb(5, 5, 5);
+    
+
+}
