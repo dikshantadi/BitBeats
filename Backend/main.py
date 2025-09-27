@@ -3,10 +3,9 @@ from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel
 from sqlalchemy.orm import Session
 import numpy as np
-
 from audio_decode import decode_fsk
 from audio_encode import encode_text as encode_text_fn
-from models import User
+from models import User, DecodedAudio
 from data_base import SessionLocal, engine, Base
 
 app = FastAPI()
@@ -30,6 +29,10 @@ app.add_middleware(
 
 class UserCreate(BaseModel):
     username: str
+
+class DecodeRequest(BaseModel):
+    user_id: int
+    audio_data: list[float]
 
 @app.post("/users/")
 def create_user(user: UserCreate, db: Session = Depends(get_db)):
@@ -66,7 +69,14 @@ async def encode_message(req: EncodeRequest):
     return {"audio_data": audio_array.tolist()}
 
 @app.post("/decode")
-async def decode_message(req: DecodeRequest):
+async def decode_message(req: DecodeRequest, db: Session = Depends(get_db)):
     audio_array = np.array(req.audio_data, dtype=np.float32)
     bitstream, message = decode_fsk(audio_array, fs=48000)
+    
+    # Save the audio to database
+    db_decoded = DecodedAudio(user_id=req.user_id, bitstream=bitstream, message=message)
+    db.add(db_decoded)
+    db.commit()
+    db.refresh(db_decoded)
+    
     return {"bitstream": bitstream, "message": message}
