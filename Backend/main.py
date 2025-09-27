@@ -1,15 +1,17 @@
-from fastapi import FastAPI, UploadFile, File 
+from fastapi import FastAPI, Depends
 from fastapi.middleware.cors import CORSMiddleware
-from fastapi.responses import StreamingResponse
+from pydantic import BaseModel
+from sqlalchemy.orm import Session
+import numpy as np
+
 from audio_decode import decode_fsk
 from audio_encode import encode_text as encode_text_fn
-import numpy as np
-from scipy.io import wavfile
-from pydantic import BaseModel
 from models import User
 from data_base import SessionLocal, engine, Base
 
 app = FastAPI()
+
+Base.metadata.create_all(bind=engine)
 
 def get_db():
     db = SessionLocal()
@@ -26,29 +28,45 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-@app.post("/users/")
-def create_user(user: User, db: SessionLocal = Depends(get_db)): # type: ignore
-    user = User(username=user.username)
-    db.add(user)
-    db.commit()
-    db.refresh(user)
-    return {id : user.id, "username": user.username}
+class UserCreate(BaseModel):
+    username: str
 
+@app.post("/users/")
+def create_user(user: UserCreate, db: Session = Depends(get_db)):
+    db_user = User(username=user.username)
+    db.add(db_user)
+    db.commit()
+    db.refresh(db_user)
+    return {"id": db_user.id, "username": db_user.username}
+
+@app.post("/register")
+def register_user(user: UserCreate, db: Session = Depends(get_db)):
+    db_user = User(username=user.username)
+    db.add(db_user)
+    db.commit()
+    db.refresh(db_user)
+    return {"id": db_user.id, "username": db_user.username}
+
+@app.post("/login")
+def login_user(user: UserCreate, db: Session = Depends(get_db)):
+    db_user = db.query(User).filter(User.username == user.username).first()
+    if not db_user:
+        return {"error": "User not found"}
+    return {"user_id": db_user.id, "message": "Login successful"}
 
 class EncodeRequest(BaseModel):
     message: str
 
-class DecodeResponse(BaseModel):
+class DecodeRequest(BaseModel):
     audio_data: list[float]
 
 @app.post("/encode")
-async def encode_message(req : EncodeRequest):
-    audio_array = encode_text_fn(req.message) 
+async def encode_message(req: EncodeRequest):
+    audio_array = encode_text_fn(req.message)
     return {"audio_data": audio_array.tolist()}
 
 @app.post("/decode")
-async def decode_message(req : DecodeResponse):
+async def decode_message(req: DecodeRequest):
     audio_array = np.array(req.audio_data, dtype=np.float32)
     bitstream, message = decode_fsk(audio_array, fs=48000)
     return {"bitstream": bitstream, "message": message}
-

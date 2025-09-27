@@ -1,12 +1,17 @@
-const API_URL = "http://192.168.1.69:8000"; // change to your backend
+const API_URL = "http://127.0.0.1:8000";
 const encodeInput = document.getElementById('bitInput');
 const output = document.getElementById('output'); 
 
 let recorder = null;
 let audioStream = null;
 let chunks = [];
+const user_id = localStorage.getItem("user_id");
 
-// --- Play WAV audio ---
+if (!user_id) {
+    alert("You must register or login first!");
+    window.location.href = "register.html";
+}
+
 function playAudio(audioArray) {
     const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
     const buffer = audioCtx.createBuffer(1, audioArray.length, 44100);
@@ -22,7 +27,7 @@ function playAudio(audioArray) {
     source.start();
 }
 
-// --- Encode text to audio ---
+
 async function sendBits() {
     const message = encodeInput.value;
     if (!message) {
@@ -46,7 +51,7 @@ async function sendBits() {
     }
 }
 
-// --- Start/Stop recording and send WAV file to backend ---
+
 async function listenAndDecodeToggle(button) {
     if (!recorder || recorder.state === "inactive") {
         try {
@@ -93,7 +98,6 @@ async function listenAndDecodeToggle(button) {
         const formData = new FormData();
         formData.append("file", wavBlob, "recording.wav");
 
-        // Send WAV file to FastAPI decode endpoint
         try {
             const response = await fetch(`${API_URL}/decode`, {
                 method: "POST",
@@ -106,7 +110,6 @@ async function listenAndDecodeToggle(button) {
             output.textContent = "Error decoding audio.";
         }
 
-        // Stop tracks
         audioStream.getTracks().forEach(track => track.stop());
         recorder = null;
         audioStream = null;

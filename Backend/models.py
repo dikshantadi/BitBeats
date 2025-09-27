@@ -1,18 +1,19 @@
-from sqlalchemy import column, Integer, String, Boolean
-from sqlmodel import Field, SQLModel
-from data_base import Base
+from sqlalchemy import Column, Integer, String, DateTime, ForeignKey
 from datetime import datetime
+from data_base import Base
 
-class User(Base, SQLModel):
+class User(Base):
     __tablename__ = "users"
-    id: int = Field(default=None, primary_key=True, idex=True)
-    username: str = Field(index=True, unique=True)
 
-class decoded_audio(Base, SQLModel):
+    id = Column(Integer, primary_key=True, index=True)
+    username = Column(String, unique=True, index=True, nullable=False)
+
+
+class DecodedAudio(Base):
     __tablename__ = "decoded_audios"
-    id: int = Field(default=None, primary_key=True, idex=True) 
-    user_id: int = Field(foreign_key="users.id")
-    bitstream: str
-    message: str
-    timestamp: datetime = Field(default=datetime.utcnow) 
 
+    id = Column(Integer, primary_key=True, index=True)
+    user_id = Column(Integer, ForeignKey("users.id"))
+    bitstream = Column(String, nullable=False)
+    message = Column(String, nullable=False)
+    timestamp = Column(DateTime, default=datetime.utcnow)

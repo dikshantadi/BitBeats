@@ -1,10 +1,9 @@
-const API_URL = "http://192.168.1.69:8000"; 
+const API_URL = "http://127.0.0.1:8000"; 
 
 document.addEventListener("DOMContentLoaded", () => {
     const form = document.querySelector("form");
     if (!form) return;
 
-    // Detect if this is register.html or login.html
     const isRegister = document.title.toLowerCase().includes("registration");
 
     form.addEventListener("submit", async (e) => {
@@ -20,10 +19,13 @@ document.addEventListener("DOMContentLoaded", () => {
                     headers: { "Content-Type": "application/json" },
                     body: JSON.stringify({ username })
                 });
-                const data = await res.json();
-                alert(res.ok ? data.message : data.detail);
+                const data = await res.json(); 
                 if (res.ok) {
-                    window.location.href = "login.html"; // Go to login after registering
+                    localStorage.setItem("user_id", data.id); 
+                    alert(data.message || "Registered successfully!");
+                    window.location.href = "login.html"; 
+                } else {
+                    alert(data.detail || "Registration failed!");
                 }
             } else {
                 // Login request
@@ -35,15 +37,15 @@ document.addEventListener("DOMContentLoaded", () => {
                 const data = await res.json();
                 if (res.ok) {
                     localStorage.setItem("user_id", data.user_id);
-                    alert(data.message);
-                    // Redirect to main app page (e.g., bitbeat.html)
-                    window.location.href = "index.html";
+                    alert(data.message || "Login successful!");
+                    window.location.href = "index.html"; 
                 } else {
-                    alert(data.detail);
+                    alert(data.detail || "Login failed!");
                 }
             }
         } catch (err) {
             alert("Error connecting to server.");
+            console.error(err);
         }
     });
 });
