@@ -12,6 +12,23 @@ if (!user_id) {
     window.location.href = "register.html";
 }
 
+async function fetchUsername() {
+    const user_id = localStorage.getItem("user_id");
+    if (!user_id){
+        window.location.href = "login.html";
+        return;
+    }
+}
+
+const res = await fetch(`${API_URL}/users/${user_id}`);
+const data = await res.json();
+document.getElementById("username").innerText = data.username;
+
+function logout() {
+    localStorage.removeItem("user_id");
+    window.location.href = "login.html";    
+}
+
 function playAudio(audioArray) {
     const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
     const buffer = audioCtx.createBuffer(1, audioArray.length, 44100);

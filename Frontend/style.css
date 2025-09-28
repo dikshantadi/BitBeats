@@ -13,6 +13,30 @@ body {
     background-repeat: no-repeat;
     background-attachment: fixed; 
 }
+
+.topbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background-color: #333;
+  color : white;
+  padding: 10px 20px;
+}
+.topbar h1 {
+  margin: 0;
+  font-size: 20px;
+ }
+
+.username {
+  font-weight: bold;
+}
+
+.logout {
+  margin-left: 15px;
+  cursor: pointer;
+  color: #f44336;
+}
+
 .container {
     background: rgba(255,255,255,0.05);
   padding: 20px 30px;
