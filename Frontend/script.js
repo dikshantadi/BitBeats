@@ -141,28 +141,31 @@ async function listenAndDecodeToggle(button) {
     }
 }
 
-async function showMyMessages() {
-    const inbox = document.getElementById("inbox");
-    const messageList = document.getElementById("messageList");
-    inbox.style.display = "block";  // show inbox container
-    messageList.innerHTML = "Loading...";
+const userId = 1; // replace with the logged-in user's ID
 
-    try {
-        const res = await fetch(`${API_URL}/messages/${user_id}`);
-        const messages = await res.json();
+async function loadInbox() {
+  const response = await fetch(`/inbox/${userId}`);
+  const messages = await response.json();
 
-        if(messages.length === 0){
-            messageList.innerHTML = "<li>No messages yet.</li>";
-        } else {
-            messageList.innerHTML = ""; // clear
-            messages.forEach(msg => {
-                const li = document.createElement("li");
-                li.textContent = `From User ${msg.sender_id}: ${msg.message} (${new Date(msg.timestamp).toLocaleString()})`;
-                messageList.appendChild(li);
-            });
-        }
-    } catch (err) {
-        console.error(err);
-        messageList.innerHTML = "<li>Error loading messages.</li>";
-    }
+  const dropdown = document.getElementById("inboxDropdown");
+  dropdown.innerHTML = "";
+
+  if (messages.length === 0) {
+    dropdown.innerHTML = "<div class='message-item'>No messages</div>";
+    return;
+  }
+
+  messages.forEach(msg => {
+    const item = document.createElement("div");
+    item.classList.add("message-item");
+    item.innerHTML = `
+      <strong>From:</strong> ${msg.sender_id}<br>
+      <span>${msg.message}</span><br>
+      <small>${new Date(msg.timestamp).toLocaleString()}</small>
+    `;
+    dropdown.appendChild(item);
+  });
 }
+
+// optional: auto-refresh inbox every few seconds
+setInterval(loadInbox, 5000);

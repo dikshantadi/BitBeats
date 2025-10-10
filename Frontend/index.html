@@ -11,19 +11,25 @@
 </head>
 <body>
   <div class="topbar">
-    <ul>
-      <li><a href="index.html" class="active">Home</a></li>
-      <li><a href="#">About</a></li>
-    </ul>
-    <div style="float: right; padding: 14px 16px; color: white;">
-      <span class="username" id="username" onclick="showMyMessages()" style="cursor:pointer;"></span>
-      <span class="logout" onclick="logout()">Logout</span>
+  <div class="logo">
+    <i class="fa-solid fa-wave-square"></i> BitBeats
+  </div>
+
+  <ul class="nav-links">
+    <li><a href="index.html" class="active">Home</a></li>
+    <li><a href="#">About</a></li>
+  </ul>
+
+  <div class="user-section">
+    <div class="dropdown">
+      <span class="username" id="username" onclick="toggleInbox()">Username ▼</span>
+      <div id="inboxDropdown" class="dropdown-content">
+        <p class="empty-msg">No new messages</p>
+      </div>
     </div>
+    <span class="logout" onclick="logout()"><i class="fa-solid fa-right-from-bracket"></i></span>
   </div>
-  <div id="inbox" class="container" style="display:none;">
-    <h2>Inbox</h2>
-    <ul id="messageList"></ul>
-  </div>
+</div>
   <div class="container">
     <h1> BitBeats <i class="fa-solid fa-wave-square"></i> </h1>
 
@@ -35,9 +41,12 @@
 
     <div class="card">
       <h2> Send </h2>
-      <button onclick="listenAndDecodeToggle(this)"> Send Message </button>
+      <button onclick="sendBits()"> Send Message </button>
       <pre id="output"></pre>
     </div>
   </div>
+  <div id="inboxDropdown" class="dropdown-content">
+      <p>Loading messages...</p>
+    </div>
 </body>
 </html>

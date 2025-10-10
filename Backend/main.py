@@ -89,15 +89,15 @@ async def decode_message(req: DecodeRequest, db: Session = Depends(get_db)):
     
     return {"bitstream": bitstream, "message": message}
 
-@app.get("/decoded_audios/{user_id}")
-def get_decoded_audios(user_id: int, db: Session = Depends(get_db)):
-    audios = db.query(DecodedAudio).filter(DecodedAudio.receiver_id == user_id).order_by(DecodedAudio.timestamp.desc()).all()
+@app.get("/inbox/{user_id}")
+def get_inbox_messages(user_id: int, db: Session = Depends(get_db)):
+    messages = db.query(DecodedAudio).filter(DecodedAudio.receiver_id == user_id).order_by(DecodedAudio.timestamp.desc()).all()
     return [
-        {   
-            "id": audio.id, 
-            "sender_id": audio.sender_id, 
-            "message": audio.message,
-            "timestamp": audio.timestamp.isoformat()
-        } 
-        for audio in audios
+        {
+            "id": msg.id,
+            "sender_id": msg.sender_id,
+            "message": msg.message,
+            "timestamp": msg.timestamp.isoformat()
+        }
+        for msg in messages
     ]
