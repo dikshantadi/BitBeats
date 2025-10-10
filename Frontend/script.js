@@ -141,10 +141,10 @@ async function listenAndDecodeToggle(button) {
     }
 }
 
-const userId = 1; // replace with the logged-in user's ID
+const userId = localStorage.getItem("user_id");
 
 async function loadInbox() {
-  const response = await fetch(`/inbox/${userId}`);
+  const response = await fetch(`${API_URL}/inbox/${userId}`);
   const messages = await response.json();
 
   const dropdown = document.getElementById("inboxDropdown");

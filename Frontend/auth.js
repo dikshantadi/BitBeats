@@ -8,27 +8,32 @@ document.addEventListener("DOMContentLoaded", () => {
 
     form.addEventListener("submit", async (e) => {
         e.preventDefault();
-
-        const username = form.querySelector("input[type='text']").value;
+        const username = form.querySelector("input[type='text']").value.trim();
+        if (!username) {
+            alert("Username is required");
+            return;
+        }
 
         try {
             if (isRegister) {
-                // Registration request
+                // 👇 Register user
                 const res = await fetch(`${API_URL}/register`, {
                     method: "POST",
                     headers: { "Content-Type": "application/json" },
                     body: JSON.stringify({ username })
                 });
                 const data = await res.json(); 
+
                 if (res.ok) {
-                    localStorage.setItem("user_id", data.id); 
-                    alert(data.message || "Registered successfully!");
-                    window.location.href = "login.html"; 
+                    localStorage.setItem("user_id", data.id);  //  save id
+                    alert("Registered successfully!");
+                    window.location.href = "index.html";       //  go straight to app
                 } else {
-                    alert(data.detail || "Registration failed!");
+                    alert(data.error || "Registration failed!");
                 }
+
             } else {
-                // Login request
+                //  Login user
                 const res = await fetch(`${API_URL}/login`, {
                     method: "POST",
                     headers: { "Content-Type": "application/json" },
@@ -36,11 +41,11 @@ document.addEventListener("DOMContentLoaded", () => {
                 });
                 const data = await res.json();
                 if (res.ok) {
-                    localStorage.setItem("user_id", data.user_id);
-                    alert(data.message || "Login successful!");
+                    localStorage.setItem("user_id", data.user_id);  //  save id
+                    alert("Login successful!");
                     window.location.href = "index.html"; 
                 } else {
-                    alert(data.detail || "Login failed!");
+                    alert(data.error || "Login failed!");
                 }
             }
         } catch (err) {

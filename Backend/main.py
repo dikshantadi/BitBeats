@@ -34,6 +34,9 @@ class DecodeRequest(BaseModel):
     user_id: int
     audio_data: list[float]
 
+class EncodeRequest(BaseModel):
+    message: str
+
 @app.post("/users/")
 def create_user(user: UserCreate, db: Session = Depends(get_db)):
     db_user = User(username=user.username)
@@ -41,6 +44,11 @@ def create_user(user: UserCreate, db: Session = Depends(get_db)):
     db.commit()
     db.refresh(db_user)
     return {"id": db_user.id, "username": db_user.username}
+
+@app.get("/users")
+def get_users(db: Session = Depends(get_db)):
+    users = db.query(User).all()
+    return [{"id": user.id, "username": user.username} for user in users ]
 
 @app.get("/users/{user_id}")
 def get_user(user_id: int, db: Session = Depends(get_db)):
@@ -65,29 +73,29 @@ def login_user(user: UserCreate, db: Session = Depends(get_db)):
         return {"error": "User not found"}
     return {"user_id": db_user.id, "message": "Login successful"}
 
-class EncodeRequest(BaseModel):
-    message: str
-
-class DecodeRequest(BaseModel):
-    audio_data: list[float]
-
 @app.post("/encode")
 async def encode_message(req: EncodeRequest):
     audio_array = encode_text_fn(req.message)
     return {"audio_data": audio_array.tolist()}
+
 
 @app.post("/decode")
 async def decode_message(req: DecodeRequest, db: Session = Depends(get_db)):
     audio_array = np.array(req.audio_data, dtype=np.float32)
     bitstream, message = decode_fsk(audio_array, fs=48000)
     
-    # Save the audio to database
-    db_decoded = DecodedAudio(user_id=req.user_id, bitstream=bitstream, message=message)
+    db_decoded = DecodedAudio(
+        sender_id=None,          
+        receiver_id=req.user_id, 
+        bitstream=bitstream,
+        message=message
+    )
     db.add(db_decoded)
     db.commit()
     db.refresh(db_decoded)
     
     return {"bitstream": bitstream, "message": message}
+
 
 @app.get("/inbox/{user_id}")
 def get_inbox_messages(user_id: int, db: Session = Depends(get_db)):
@@ -101,3 +109,26 @@ def get_inbox_messages(user_id: int, db: Session = Depends(get_db)):
         }
         for msg in messages
     ]
+
+class SendMessageRequest(BaseModel):
+    sender_id: int
+    receiver_id: int
+    message: str
+
+@app.post("/send_message")
+def send_message(req: SendMessageRequest, db: Session = Depends(get_db)):
+    db_message = DecodedAudio(
+        sender_id=req.sender_id,
+        receiver_id=req.receiver_id,
+        bitstream="",   
+        message=req.message
+    )
+    db.add(db_message)
+    db.commit()
+    db.refresh(db_message)
+    return {
+        "id": db_message.id,
+        "sender_id": db_message.sender_id,
+        "receiver_id": db_message.receiver_id,
+        "message": db_message.message
+    }
