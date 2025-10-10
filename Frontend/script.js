@@ -14,15 +14,23 @@ if (!user_id) {
 
 async function fetchUsername() {
     const user_id = localStorage.getItem("user_id");
-    if (!user_id){
+    if (!user_id) {
         window.location.href = "login.html";
         return;
     }
+
+    try {
+        const res = await fetch(`${API_URL}/users/${user_id}`);
+        if (!res.ok) throw new Error("Failed to fetch user");
+        const data = await res.json();
+        document.getElementById("username").innerText = data.username;
+    } catch (err) {
+        console.error("Error fetching username:", err);
+        document.getElementById("username").innerText = "Guest";
+    }
 }
 
-const res = await fetch(`${API_URL}/users/${user_id}`);
-const data = await res.json();
-document.getElementById("username").innerText = data.username;
+window.addEventListener("DOMContentLoaded", fetchUsername);
 
 function logout() {
     localStorage.removeItem("user_id");

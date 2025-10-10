@@ -7,6 +7,7 @@
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
   <script src="https://unpkg.com/wavefile@14.0.0/dist/wavefile.min.js"></script>
   <script src="script.js" defer></script>
+
 </head>
 <body>
   <div class="topbar">
@@ -15,7 +16,7 @@
       <li><a href="#">About</a></li>
     </ul>
     <div style="float: right; padding: 14px 16px; color: white;">
-      <span class="username" id="username">Guest</span>
+      <span class="username" id="username"> </span>
       <span class="logout" onclick="logout()">Logout</span>
     </div>
   </div>
@@ -23,14 +24,14 @@
     <h1> BitBeats <i class="fa-solid fa-wave-square"></i> </h1>
 
     <div class="card">
-      <h2>Encode</h2>
+      <h2>Encode </h2>
       <input id="bitInput" type="text" placeholder="Enter your message here " />
-      <button onclick="sendBits()">Encode</button>
+      <button onclick="sendBits()">Encode and Listen</button>
     </div>
 
     <div class="card">
-      <h2>Decode</h2>
-      <button onclick="listenAndDecodeToggle(this)">Listen & Decode</button>
+      <h2> Send </h2>
+      <button onclick="listenAndDecodeToggle(this)"> Send Message </button>
       <pre id="output"></pre>
     </div>
   </div>

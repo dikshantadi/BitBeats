@@ -42,6 +42,14 @@ def create_user(user: UserCreate, db: Session = Depends(get_db)):
     db.refresh(db_user)
     return {"id": db_user.id, "username": db_user.username}
 
+@app.get("/users/{user_id}")
+def get_user(user_id: int, db: Session = Depends(get_db)):
+    user = db.query(User).filter(User.id == user_id).first()
+    if not user:
+        return {"error": "User not found"}
+    return {"id": user.id, "username": user.username}
+
+
 @app.post("/register")
 def register_user(user: UserCreate, db: Session = Depends(get_db)):
     db_user = User(username=user.username)
