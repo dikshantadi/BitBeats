@@ -16,9 +16,13 @@
       <li><a href="#">About</a></li>
     </ul>
     <div style="float: right; padding: 14px 16px; color: white;">
-      <span class="username" id="username"> </span>
+      <span class="username" id="username" onclick="showMyMessages()" style="cursor:pointer;"></span>
       <span class="logout" onclick="logout()">Logout</span>
     </div>
+  </div>
+  <div id="inbox" class="container" style="display:none;">
+    <h2>Inbox</h2>
+    <ul id="messageList"></ul>
   </div>
   <div class="container">
     <h1> BitBeats <i class="fa-solid fa-wave-square"></i> </h1>

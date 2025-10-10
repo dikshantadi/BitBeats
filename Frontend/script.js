@@ -140,3 +140,29 @@ async function listenAndDecodeToggle(button) {
         audioStream = null;
     }
 }
+
+async function showMyMessages() {
+    const inbox = document.getElementById("inbox");
+    const messageList = document.getElementById("messageList");
+    inbox.style.display = "block";  // show inbox container
+    messageList.innerHTML = "Loading...";
+
+    try {
+        const res = await fetch(`${API_URL}/messages/${user_id}`);
+        const messages = await res.json();
+
+        if(messages.length === 0){
+            messageList.innerHTML = "<li>No messages yet.</li>";
+        } else {
+            messageList.innerHTML = ""; // clear
+            messages.forEach(msg => {
+                const li = document.createElement("li");
+                li.textContent = `From User ${msg.sender_id}: ${msg.message} (${new Date(msg.timestamp).toLocaleString()})`;
+                messageList.appendChild(li);
+            });
+        }
+    } catch (err) {
+        console.error(err);
+        messageList.innerHTML = "<li>Error loading messages.</li>";
+    }
+}

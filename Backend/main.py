@@ -88,3 +88,16 @@ async def decode_message(req: DecodeRequest, db: Session = Depends(get_db)):
     db.refresh(db_decoded)
     
     return {"bitstream": bitstream, "message": message}
+
+@app.get("/decoded_audios/{user_id}")
+def get_decoded_audios(user_id: int, db: Session = Depends(get_db)):
+    audios = db.query(DecodedAudio).filter(DecodedAudio.receiver_id == user_id).order_by(DecodedAudio.timestamp.desc()).all()
+    return [
+        {   
+            "id": audio.id, 
+            "sender_id": audio.sender_id, 
+            "message": audio.message,
+            "timestamp": audio.timestamp.isoformat()
+        } 
+        for audio in audios
+    ]
