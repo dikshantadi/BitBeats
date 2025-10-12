@@ -40,11 +40,14 @@
       <button onclick="sendBits()">Encode and Listen</button>
     </div>
 
-    <div class="card">
-      <h2> Send </h2>
-      <button onclick="sendDecodedMessage()"> Send Message </button>
-      <pre id="output"></pre>
-    </div>
+<div class="card">
+  <h2>Send</h2>
+  <select id="receiverSelect">
+    <option value="">-- Select Receiver --</option>
+  </select>
+  <button id="sendMessageBtn">Send Message</button>
+  <pre id="output"></pre>
+</div>
   </div>
   <div id="inboxDropdown" class="dropdown-content">
       <p>Loading messages...</p>

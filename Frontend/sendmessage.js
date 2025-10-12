@@ -10,7 +10,7 @@ async function loadUsers() {
         const users = await res.json();
 
         users.forEach(user => {
-            if (user.id !== userId) { // don't include yourself
+            if (user.id !== userId) { 
                 const option = document.createElement("option");
                 option.value = user.id;
                 option.textContent = user.username;
