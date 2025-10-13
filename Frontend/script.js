@@ -6,6 +6,7 @@ let audioStream = null;
 let chunks = [];
 const user_id = localStorage.getItem("user_id");
 
+
 if (!user_id) {
     alert("You must register or login first!");
     window.location.href = "register.html";
@@ -68,7 +69,8 @@ async function sendBits() {
 
         const data = await response.json();
         playAudio(data.audio_data);
-        output.textContent = "Message encoded and playing...";
+        output.textContent = message; 
+        lastDecodedMessage = message;
     } catch (err) {
         console.error(err);
         output.textContent = "Error encoding message.";
