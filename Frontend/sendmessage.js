@@ -2,6 +2,17 @@ const API_URL = "http://127.0.0.1:8000";
 
 const receiverSelect = document.getElementById("receiverSelect");
 const sendBtn = document.getElementById("sendMessageBtn");
+let userMap = {};
+
+async function loadUserMap() {
+    const res = await fetch(`${API_URL}/users`);
+    const users = await res.json();
+    userMap = {};
+    users.forEach(u => {
+        userMap[u.id] = u.username;
+    });
+}
+
 
 async function loadUsers() {
     const userId = parseInt(localStorage.getItem("user_id"));
